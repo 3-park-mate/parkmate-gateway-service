@@ -57,13 +57,15 @@ jobs:
           ssh -i gateway-key.pem -o StrictHostKeyChecking=no ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} \
           "mkdir -p /home/${{ secrets.EC2_USER }}/gateway"
 
-      - name: Copy docker-compose.yml to EC2
+      - name: Copy files to EC2
         run: |
+          # Replace env vars in compose file
           sed "s|\${DOCKER_USERNAME}|${{ secrets.DOCKER_USERNAME }}|g" docker-compose.yml > docker-compose.remote.yml
           
           scp -i gateway-key.pem -o StrictHostKeyChecking=no \
-          docker-compose.remote.yml \
-          ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:/home/${{ secrets.EC2_USER }}/gateway/docker-compose.yml
+            docker-compose.remote.yml \
+            .env \
+            ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:/home/${{ secrets.EC2_USER }}/gateway/
 
       - name: Remote Docker Compose Pull & Up
         run: |
@@ -72,3 +74,6 @@ jobs:
             docker compose pull
             docker compose up -d
           EOF
+
+      - name: Clean up local PEM file
+        run: rm -f gateway-key.pem

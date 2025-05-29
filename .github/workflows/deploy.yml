@@ -34,6 +34,11 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
+      - name: Create .env file
+        run: |
+          echo "SPRING_PROFILES_ACTIVE=prod" > .env
+          echo "DOCKER_USERNAME=${{ secrets.DOCKER_USERNAME }}" >> .env
+
       - name: Build and Push Docker Image to Docker Hub
         uses: docker/build-push-action@v5
         with:

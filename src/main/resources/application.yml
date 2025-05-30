@@ -109,7 +109,7 @@ eureka:
     register-with-eureka: true
     fetch-registry: true
     service-url:
-      defaultZone: http://${EUREKA_HOST}:8761/eureka/
+      defaultZone: http://${EUREKA_HOST}:8761/eureka
 
 springdoc:
   api-docs:

@@ -1,4 +1,4 @@
-name: Deploy Gateway from ECR to EC2
+name: Deploy Gateway from Docker Hub to EC2
 
 on:
   push:
@@ -68,20 +68,9 @@ jobs:
           key: ${{ secrets.EC2_PRIVATE_KEY }}
           script_stop: true
           script: |
-            mkdir -p ~/.aws
-
-            echo "[default]" > ~/.aws/credentials
-            echo "aws_access_key_id=${{ secrets.AWS_ACCESS_KEY_ID }}" >> ~/.aws/credentials
-            echo "aws_secret_access_key=${{ secrets.AWS_SECRET_ACCESS_KEY }}" >> ~/.aws/credentials
-
-            aws configure set region ap-northeast-2
-
-            aws ecr get-login-password --region ap-northeast-2 \
-              | docker login --username AWS --password-stdin 090188239653.dkr.ecr.ap-northeast-2.amazonaws.com
-
-            docker pull 090188239653.dkr.ecr.ap-northeast-2.amazonaws.com/gateway-service:latest
-
+            echo "AWS_ACCESS_KEY_ID"=${{ secrets.AWS_ACCESS_KEY_ID }} > .env
+            echo "AWS_SECRET_ACCESS_KEY"=${{ secrets.AWS_SECRET_ACCESS_KEY }} >> .env
+            docker pull ${{ steps.login-ecr.outputs.registry }}/gateway-service:latest
             docker-compose -f docker-compose-gateway.yml down
             docker-compose -f docker-compose-gateway.yml up -d
-
             docker image prune -f

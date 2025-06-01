@@ -68,7 +68,8 @@ jobs:
           script: |
             echo "AWS_ACCESS_KEY_ID"=${{ secrets.AWS_ACCESS_KEY_ID }} > .env
             echo "AWS_SECRET_ACCESS_KEY"=${{ secrets.AWS_SECRET_ACCESS_KEY }} >> .env
-            docker pull ${{ steps.login-ecr.outputs.registry }}/gateway-service:latest
-            docker compose -f docker-compose-gateway.yml down
-            docker compose -f docker-compose-gateway.yml up -d
+            echo "EUREKA_HOST=${{ secrets.EUREKA_HOST }}" >> .env
+            docker pull ${{ steps.login-ecr.outputs.registry }}/discovery-service:latest
+            docker compose -f docker-compose-discovery.yml down
+            docker compose -f docker-compose-discovery.yml up -d
             docker image prune -f

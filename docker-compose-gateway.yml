@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  gateway:
+    container_name: gateway_service
+    image: 090188239653.dkr.ecr.ap-northeast-2.amazonaws.com/gateway-service:latest
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    networks:
+      - backend
+
+networks:
+  backend:
+    external: true

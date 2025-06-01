@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   gateway:
-    container_name: gateway_service
+    container_name: gateway-service
     image: 090188239653.dkr.ecr.ap-northeast-2.amazonaws.com/gateway-service:latest
     ports:
       - "8000:8000"

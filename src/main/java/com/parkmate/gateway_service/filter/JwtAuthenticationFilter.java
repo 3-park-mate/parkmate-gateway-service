@@ -1,0 +1,87 @@
+package com.parkmate.gateway_service.filter;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.parkmate.gateway_service.auth.JwtProvider;
+import com.parkmate.gateway_service.common.exception.BaseResponseStatus;
+import com.parkmate.gateway_service.common.response.ApiResponse;
+import com.parkmate.gateway_service.config.SkipPathProperties;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.cloud.gateway.filter.GatewayFilter;
+import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
+import org.springframework.core.io.buffer.DataBuffer;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.server.reactive.ServerHttpRequest;
+import org.springframework.http.server.reactive.ServerHttpResponse;
+import org.springframework.stereotype.Component;
+import org.springframework.web.server.ServerWebExchange;
+import reactor.core.publisher.Mono;
+
+@Slf4j
+@Component
+public class JwtAuthenticationFilter extends AbstractGatewayFilterFactory<JwtAuthenticationFilter.Config> {
+
+    private final JwtProvider jwtProvider;
+
+    private final SkipPathProperties skipPathProperties;
+
+    public JwtAuthenticationFilter(JwtProvider jwtProvider, SkipPathProperties skipPathProperties) {
+        super(Config.class);
+        this.jwtProvider = jwtProvider;
+        this.skipPathProperties = skipPathProperties;
+    }
+
+    public static class Config {
+
+    }
+
+    @Override
+    public GatewayFilter apply(Config config) {
+        return (exchange, chain) -> {
+            ServerHttpRequest request = exchange.getRequest();
+            String path = request.getURI().getPath();
+
+            if (shouldSkip(path)) {
+                return chain.filter(exchange);
+            }
+
+            String authorizationHeader = request.getHeaders().getFirst("Authorization");
+
+            if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
+                return handleException(exchange, BaseResponseStatus.NO_JWT_TOKEN);
+            }
+
+            String token = authorizationHeader.replace("Bearer ", "");
+            if (!jwtProvider.validateToken(token)) {
+                return handleException(exchange, BaseResponseStatus.TOKEN_NOT_VALID);
+            }
+
+            return chain.filter(exchange);
+        };
+    }
+
+    private boolean shouldSkip(String path) {
+        boolean skip = skipPathProperties.getSkipAuthPaths().stream()
+                .anyMatch(path::startsWith);
+        return skip;
+    }
+
+    private Mono<Void> handleException(ServerWebExchange exchange, BaseResponseStatus status) {
+        ServerHttpResponse response = exchange.getResponse();
+        response.setStatusCode(HttpStatus.UNAUTHORIZED);
+        response.getHeaders().setContentType(MediaType.APPLICATION_JSON);
+
+        ApiResponse<String> apiResponse = new ApiResponse<>(HttpStatus.UNAUTHORIZED.value(), status.getCode(), status.getMessage());
+
+        byte[] data;
+        try {
+            data = new ObjectMapper().writeValueAsBytes(apiResponse);
+        } catch (JsonProcessingException e) {
+            data = new byte[0];
+        }
+
+        DataBuffer buffer = response.bufferFactory().wrap(data);
+        return response.writeWith(Mono.just(buffer)).then(Mono.empty());
+    }
+}

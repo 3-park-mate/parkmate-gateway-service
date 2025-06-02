@@ -123,4 +123,7 @@ springdoc:
         name: "Feed Service API"
       - url: "/auth-service/v3/api-docs"
         name: "Auth Service API"
-
+      - url: "/gateway-service/v3/api-docs"
+        name: "Gateway Service API"
+      - url: "/discovery-service/v3/api-docs"
+        name: "Discovery Service API"

@@ -7,7 +7,6 @@ spring:
     web-application-type: reactive
   application:
     name: gateway-service
-
   cloud:
     gateway:
       default-filters:
@@ -113,10 +112,10 @@ eureka:
 
 springdoc:
   api-docs:
-    path: /v3/api-docs  # API ?? ??
+    path: /v3/api-docs
   swagger-ui:
     enabled: true
-    path: /swagger-ui/index.html
+    path: /webjars/swagger-ui/index.htmlb
 
     urls:
       - url: "/feed-service/v3/api-docs"
@@ -127,3 +126,5 @@ springdoc:
         name: "Gateway Service API"
       - url: "/discovery-service/v3/api-docs"
         name: "Discovery Service API"
+      - url: "/chat-service/v3/api-docs"
+        name: "Chat Service API"

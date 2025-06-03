@@ -115,7 +115,7 @@ springdoc:
     path: /v3/api-docs
   swagger-ui:
     enabled: true
-    path: /webjars/swagger-ui/index.htmlb
+    path: /webjars/swagger-ui/index.html
 
     urls:
       - url: "/feed-service/v3/api-docs"
@@ -128,3 +128,5 @@ springdoc:
         name: "Discovery Service API"
       - url: "/chat-service/v3/api-docs"
         name: "Chat Service API"
+      - url: "/parking-service/v3/api-docs"
+        name: "Parking Service API"

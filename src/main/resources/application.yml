@@ -115,7 +115,7 @@ springdoc:
     path: /v3/api-docs
   swagger-ui:
     enabled: true
-    path: /webjars/swagger-ui/index.html
+    path: /
 
     urls:
       - url: "/chat-service/v3/api-docs"

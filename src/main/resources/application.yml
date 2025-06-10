@@ -122,5 +122,7 @@ springdoc:
         name: "Chat Service API"
       - url: "/parking-service/v3/api-docs"
         name: "Parking Service API"
-      - url: "/Auth-service/v3/api-docs"
+      - url: "/auth-service/v3/api-docs"
         name: "Auth Service API"
+      - url: "/parking-read--service/v3/api-docs"
+        name: "Parking-Read Service API"

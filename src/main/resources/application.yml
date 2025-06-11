@@ -60,6 +60,13 @@ spring:
           filters:
             - StripPrefix=1
 
+        - id: parking-read-service
+          uri: lb://PARKING-READ-SERVICE
+          predicates:
+            - Path=/parking-read-service/**
+          filters:
+            - StripPrefix=1
+
         - id: reservation-service
           uri: lb://RESERVATION-SERVICE
           predicates:
@@ -101,7 +108,6 @@ spring:
             - Path=/chat-service/**
           filters:
             - StripPrefix=1
-#              jwtfilter
 
 eureka:
   client:

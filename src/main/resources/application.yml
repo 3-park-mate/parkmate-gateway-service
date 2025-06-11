@@ -124,5 +124,5 @@ springdoc:
         name: "Parking Service API"
       - url: "/auth-service/v3/api-docs"
         name: "Auth Service API"
-      - url: "/parking-read--service/v3/api-docs"
+      - url: "/parking-read-service/v3/api-docs"
         name: "Parking-Read Service API"

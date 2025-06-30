@@ -140,3 +140,5 @@ springdoc:
         name: "Reservation Service API"
       - url: "/notification-service/v3/api-docs"
         name: "Notification Service API"
+      - url: "/review-service/v3/api-docs"
+        name: "Review Service API"

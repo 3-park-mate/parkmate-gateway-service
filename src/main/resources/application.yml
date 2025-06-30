@@ -66,6 +66,13 @@ spring:
             - Path=/parking-read-service/**
           filters:
             - StripPrefix=1
+            -
+        - id: parking-history-service
+          uri: lb://PARKING-HISTORY-SERVICE
+          predicates:
+            - Path=/parking-history-service/**
+          filters:
+            - StripPrefix=1
 
         - id: reservation-service
           uri: lb://RESERVATION-SERVICE
@@ -151,3 +158,5 @@ springdoc:
         name: "Review Service API"
       - url: "/review-read-service/v3/api-docs"
         name: "Review Read Service API"
+      - url: "/parking-history-service/v3/api-docs"
+        name: "Parking History Service API"

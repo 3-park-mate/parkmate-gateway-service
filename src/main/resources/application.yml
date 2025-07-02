@@ -67,6 +67,12 @@ spring:
           filters:
             - StripPrefix=1
 
+        - id: batch-service
+          uri: lb://BATCH-SERVICE
+          predicates:
+            - Path=/batch-service/**
+          filters:
+            - StripPrefix=1
 
         - id: parking-history-service
           uri: lb://PARKING-HISTORY-SERVICE
@@ -161,3 +167,5 @@ springdoc:
         name: "Review Read Service API"
       - url: "/parking-history-service/v3/api-docs"
         name: "Parking History Service API"
+      - url: "/batch-service/v3/api-docs"
+        name: "Batch Service API"

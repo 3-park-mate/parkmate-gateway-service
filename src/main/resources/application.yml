@@ -169,3 +169,5 @@ springdoc:
         name: "Parking History Service API"
       - url: "/batch-service/v3/api-docs"
         name: "Batch Service API"
+      - url: "/payment-service/v3/api-docs"
+        name: "Payment Service API"

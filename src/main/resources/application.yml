@@ -130,6 +130,13 @@ spring:
           filters:
             - StripPrefix=1
 
+        - id: order-service
+          uri: lb://ORDER-SERVICE
+          predicates:
+            - Path=/order-service/**
+          filters:
+            - StripPrefix=1
+
 eureka:
   client:
     register-with-eureka: true
@@ -171,3 +178,5 @@ springdoc:
         name: "Batch Service API"
       - url: "/payment-service/v3/api-docs"
         name: "Payment Service API"
+      - url: "/order-service/v3/api-docs"
+        name: "Order Service API"
